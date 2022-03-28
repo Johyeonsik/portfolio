@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.MessageMapper">
+	<update id="updateSendcnt">
+		update tbl_user set sendcnt=sendcnt+1 
+		where uid=#{uid}
+ 	</update>
+ 	
+	<update id="updateRececnt">
+		update tbl_user set rececnt=rececnt+1 
+		where uid=#{uid}
+ 	</update>
+ 	
+	<select id="read" resultType="com.example.domain.MessageVO">
+		select * from tbl_message 
+		where mno=#{mno}
+	</select>
+	<update id="updateReaddate">
+		update tbl_message set readdate=now() 
+		where mno=#{mno}
+	</update>
+    <select id="sendList" resultType="com.example.domain.MessageVO">
+        select m.*,u.uname 
+        from tbl_message m, tbl_user u
+        where sender=#{uid} and uid=receiver
+        order by mno desc
+    </select>
+    
+    <insert id="insert">
+    	insert into tbl_message(sender, receiver, message)
+    	values(#{sender}, #{receiver}, #{message})
+    </insert>
+    
+        <select id="receiveList" resultType="com.example.domain.MessageVO">
+	        select m.*,u.uname
+	        from tbl_message m, tbl_user u
+	        where receiver=#{uid} and uid=sender
+	        order by mno desc
+        </select>
+</mapper>
